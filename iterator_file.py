@@ -7,6 +7,17 @@ class MyIterator:
     def __init__(self, url, file_one):
         self.url = url
         self.file_one = file_one
+
+    def __iter__(self):
+        self.making_links()
+        return self
+
+
+    def __next__(self):
+        if not self.url: 
+			raise StopIteration  
+		return 
+
     
     def making_links(self):
         with open(self.file_one, 'w') as file:
@@ -17,7 +28,12 @@ class MyIterator:
                 wiki_country_link = f'https://en.wikipedia.org/wiki/{country_name}'
                 line = f'{country_name} — {wiki_country_link}\n'
                 file.write(line) 
-                
+
+
+iterator = MyIterator('https://raw.githubusercontent.com/mledoze/countries/master/countries.json', 'countries_links.txt')
+
+for link in iterator:
+    print(link)
         
 # MyIterator('https://raw.githubusercontent.com/mledoze/countries/master/countries.json', 'countries_links.txt').making_links()
 

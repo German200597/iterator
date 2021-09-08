@@ -15,12 +15,17 @@ class MyIterator:
 
     def __iter__(self):
         self.making_links()
-        return self
+        self.line = None
 
     def __next__(self):
-        if not self.line:
+        if not self.new_data:
             raise StopIteration
-        return requests.get(self.line).text
+        for key in self.new_data:
+            country_name = key['name']['official']
+            wiki_country_link = f'https://en.wikipedia.org/wiki/{country_name}'
+            self.line = f'{country_name} — {wiki_country_link}\n'    
+            return self.line
+            
 
 		
 
@@ -37,11 +42,8 @@ class MyIterator:
 
     def making_links(self):
         data = requests.get(self.url, stream=True)
-        new_data =  data.json()
-        for key in new_data:
-            country_name = key['name']['official']
-            wiki_country_link = f'https://en.wikipedia.org/wiki/{country_name}'
-            self.line = f'{country_name} — {wiki_country_link}\n'
+        self.new_data = data.json()
+
                              
 
 
